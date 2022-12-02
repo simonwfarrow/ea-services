@@ -1,10 +1,8 @@
-
-import {expect} from 'chai';
-import {it} from "mocha";
+import { expect } from 'chai';
+import { it } from "mocha";
 import ServiceDescriptor from "../ServiceDescriptor.js";
-import {generateServiceDiagram} from "../index.js";
-
-const sdStr : string = 'name: Access 3DS\n' +
+import { generateServiceDiagram } from "../index.js";
+const sdStr = 'name: Access 3DS\n' +
     'description: Provides a 3DS card check\n' +
     'type: platform\n' +
     'status: Live\n' +
@@ -122,14 +120,10 @@ const sdStr : string = 'name: Access 3DS\n' +
     '    protocol: http\n' +
     '    encryption: tls\n' +
     '  at_rest_encryption: N/A\n';
-
-describe('The generator module', function() {
+describe('The generator module', function () {
     it('generates plantuml from a service descriptor', function () {
-
-        let sd: ServiceDescriptor = new ServiceDescriptor(sdStr);
-
+        let sd = new ServiceDescriptor(sdStr);
         const result = generateServiceDiagram(sd);
-
         expect('@startuml\n' +
             'skinparam backgroundColor transparent\n' +
             '!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml\n' +
@@ -145,7 +139,5 @@ describe('The generator module', function() {
             '}\n' +
             'SHOW_LEGEND()\n' +
             ' @enduml').to.eq(result);
-
-    })
-})
-
+    });
+});
