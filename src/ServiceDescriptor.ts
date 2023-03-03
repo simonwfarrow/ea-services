@@ -282,12 +282,12 @@ export class Region {
 
 export class VPC {
     name: string
-    ip: string
+    cidr: string
     tgw: boolean
 
     constructor(vpc: any) {
         this.name = vpc.name;
-        this.ip = vpc.ip;
+        this.cidr = vpc.cidr;
         this.tgw = vpc.tgw;
     }
 

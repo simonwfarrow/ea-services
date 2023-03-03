@@ -89,17 +89,20 @@ const sdStr = 'name: Access 3DS\n' +
     '      replicas: 3\n' +
     '      vpc: \n' +
     '        name: vpc-123\n' +
-    '        ip: 110.140.32.0/21\n' +
+    '        cidr: 110.140.32.0/21\n' +
+    '        tgw: false\n' +
     '    - name: eu-west-2\n' +
     '      replicas: 3\n' +
     '      vpc: \n' +
     '        name: vpc-123\n' +
-    '        ip: 110.140.32.0/21\n' +
+    '        cidr: 110.140.32.0/21\n' +
+    '        tgw: false\n' +
     '    - name: eu-central-1\n' +
     '      replicas: 3\n' +
     '      vpc: \n' +
     '        name: vpc-123\n' +
-    '        ip: 110.140.32.0/21\n' +
+    '        cidr: 110.140.32.0/21\n' +
+    '        tgw: false\n' +
     '  cd_pipelines: # array of CD pipelines\n' +
     '    - name: CV - new deploy job\n' +
     '      url: https://cerberus-build-ci-1.prod.euw1.gw2.worldpay.io/job/CV%20Deployment%20-%20V2/job/CV%20-%20new%20deploy%20job/\n' +

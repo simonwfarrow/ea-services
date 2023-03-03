@@ -173,7 +173,7 @@ export class Region {
 export class VPC {
     constructor(vpc) {
         this.name = vpc.name;
-        this.ip = vpc.ip;
+        this.cidr = vpc.cidr;
         this.tgw = vpc.tgw;
     }
 }
