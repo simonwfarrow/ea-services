@@ -4,9 +4,13 @@ import {getServiceDescriptors} from "./GitHubQuery.js";
 
 export default class ServicesRepositoryGitHub implements ServicesRepository{
 
+    config: any;
+    constructor(config: any) {
+        this.config = config
+    }
 
-    getServices(config: any): Promise<ServiceDescriptor[]> {
-        return getServiceDescriptors(config.url, config.token, config.owner, config.repo).then(repo => {
+    getServices(): Promise<ServiceDescriptor[]> {
+        return getServiceDescriptors(this.config.url, this.config.token, this.config.owner, this.config.repo).then(repo => {
 
             let services : ServiceDescriptor[] = [];
             // @ts-ignore

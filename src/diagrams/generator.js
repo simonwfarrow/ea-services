@@ -11,6 +11,7 @@ export default function generateServiceDiagram(serviceDescriptor) {
         "AddRelTag(\"default\", $textColor=\"black\", $lineColor=\"black\", $sprite=\"&ban\", $legendSprite=\"&ban\", $legendText=\"No Status\")\n" +
         "System_Boundary(s1,\"Service Boundary\") {\nSystem(" + service_name + ",\"" + serviceDescriptor?.name + "\",\"" +
         serviceDescriptor?.description + "\")\n}\n";
+    //first draw out all systems
     if (serviceDescriptor?.interactions != null) {
         for (let interaction in serviceDescriptor?.interactions) {
             if (serviceDescriptor?.interactions[interaction]?.name != null) {
@@ -19,6 +20,7 @@ export default function generateServiceDiagram(serviceDescriptor) {
             }
         }
     }
+    //now add the relationships between the systems
     if (serviceDescriptor?.interactions != null) {
         for (let interaction in serviceDescriptor?.interactions) {
             if (serviceDescriptor?.interactions[interaction]?.name != null) {
@@ -28,7 +30,7 @@ export default function generateServiceDiagram(serviceDescriptor) {
                         puml = puml + `Rel(${dservice_name} ,${service_name},\"${serviceDescriptor?.interactions[interaction]?.description} \",$tags=\"${serviceDescriptor?.interactions[interaction]?.status}\")\n`;
                     }
                     else if (serviceDescriptor.interactions[interaction]?.flow_direction?.toLowerCase() === 'out') {
-                        puml = puml + `Rel(${service_name},${dservice_name},\"${serviceDescriptor?.interactions[interaction]?.description} \",$tags=\"${serviceDescriptor?.interactions[interaction]?.status}\")\n`;
+                        puml = puml + `Rel(${service_name}, ${dservice_name},\"${serviceDescriptor?.interactions[interaction]?.description} \",$tags=\"${serviceDescriptor?.interactions[interaction]?.status}\")\n`;
                     }
                 }
             }

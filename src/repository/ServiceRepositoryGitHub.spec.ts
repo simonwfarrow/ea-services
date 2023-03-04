@@ -4,13 +4,13 @@ import {expect} from "chai";
 
 describe('The Github Service Repository', function () {
     it('returns a service', function () {
-        let repo = new ServicesRepositoryGitHub();
-        repo.getServices({
-            url: 'https://github.worldpay.com/api',
-            token: 'Bearer <TOKEN>',
-            owner: 'access-for-ecom-doc',
-            repo: 'electronic-architect'
-        }).then(services => {
+        let repo = new ServicesRepositoryGitHub({
+            url: 'https://api.github.com',
+            token: 'Bearer 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',
+            owner: 'simonwfarrow',
+            repo: 'ea-resources'
+        });
+        repo.getServices().then(services => {
             expect(services).to.have.length.above(0);
         })
     })
