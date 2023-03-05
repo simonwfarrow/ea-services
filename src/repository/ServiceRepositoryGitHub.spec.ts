@@ -6,7 +6,7 @@ describe('The Github Service Repository', function () {
     it('returns a service', function () {
         let repo = new ServicesRepositoryGitHub({
             url: 'https://api.github.com',
-            token: 'Bearer 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',
+            token: 'Bearer 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',
             owner: 'simonwfarrow',
             repo: 'ea-resources'
         });
