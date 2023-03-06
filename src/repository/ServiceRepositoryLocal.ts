@@ -1,5 +1,5 @@
 import ServicesRepository from "./ServicesRepository.js";
-import ServiceDescriptor from "../ServiceDescriptor.js";
+import ServiceDescriptor from "../model/ServiceDescriptor.js";
 import * as fs from "fs";
 import path from "path";
 

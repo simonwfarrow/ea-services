@@ -1,5 +1,5 @@
 import ServicesRepository from "./ServicesRepository.js";
-import ServiceDescriptor from "../ServiceDescriptor.js";
+import ServiceDescriptor from "../model/ServiceDescriptor.js";
 import {getServiceDescriptors} from "./GitHubQuery.js";
 
 export default class ServicesRepositoryGitHub implements ServicesRepository{

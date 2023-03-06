@@ -1,86 +1,56 @@
 // @ts-nocheck
 import yaml from "js-yaml";
-
-export const parseYaml = function (service: string) {
+export const parseYaml = function (service) {
     return yaml.load(service);
-}
-
-export default class ServiceDescriptor{
-    name:                 string;
-    description:          string;
-    type:                 string;
-    status:               string;
-    code_repo:            string;
-    doc_repo:             string;
-    lean_sdlc:            LeanSdlc;
-    secrets_management:   SecretsManagement;
-    team:                 string;
-    technology:           Technology[];
-    build_tool:           BuildTool;
-    quality_stage_gates:  QualityStageGates;
-    ci_pipelines:         BuildTool[];
-    ops_dashboards:       OpsDashboard[];
-    interactions:         Interactions;
-    diagrams:             Diagram[];
-    deployment:           Deployment;
-    endpoint:             Endpoint;
-    security:             Security;
-
-    constructor(service: string) {
-
-        const ymlObj = parseYaml(service)
-
+};
+export default class ServiceDescriptor {
+    constructor(service) {
+        const ymlObj = parseYaml(service);
         this.name = ymlObj.name;
         this.description = ymlObj.description;
-        this.type  = ymlObj.type;
+        this.type = ymlObj.type;
         this.code_repo = ymlObj.code_repo;
         this.doc_repo = ymlObj.doc_repo;
-
         if (ymlObj.lean_sdlc != null) {
             this.lean_sdlc = new LeanSdlc(ymlObj.lean_sdlc);
         }
-
         if (ymlObj.secrets_management != null) {
             this.secrets_management = new SecretsManagement(ymlObj.secrets_management);
         }
-
         this.team = ymlObj.team;
-
         if (ymlObj.technology != null) {
             ymlObj.technology.forEach(tech => {
                 this.technology = [];
                 this.technology.push(new Technology(tech));
-            })
+            });
         }
-
         if (ymlObj.build_tool != null) {
             this.build_tool = new BuildTool(ymlObj.build_tool);
         }
         if (ymlObj.quality_stage_gates != null) {
             this.quality_stage_gates = new QualityStageGates(ymlObj.quality_stage_gates);
         }
-
         if (ymlObj.ci_pipelines != null) {
             ymlObj.ci_pipelines.forEach(pipeline => {
                 this.ci_pipelines = [];
                 this.ci_pipelines.push(new BuildTool(pipeline));
-            })
+            });
         }
-
         if (ymlObj.ops_dashboards != null) {
             ymlObj.ops_dashboards.forEach(dash => {
                 this.ops_dashboards = [];
                 this.ops_dashboards.push(new OpsDashboard(dash));
-            })
+            });
         }
-
+        if (ymlObj.interactions != null) {
+            this.interactions = new Interactions(ymlObj.interactions);
+        }
         if (ymlObj.diagrams != null) {
             ymlObj.diagrams.forEach(diagram => {
                 this.diagrams = [];
                 this.diagrams.push(new Diagram(diagram));
-            })
+            });
         }
-
         if (ymlObj.deployment != null) {
             this.deployment = new Deployment(ymlObj.deployment);
         }
@@ -90,114 +60,66 @@ export default class ServiceDescriptor{
         if (ymlObj.security != null) {
             this.security = new Security(ymlObj.security);
         }
-
-
     }
-
 }
-
-
 export class BuildTool {
-    name: null | string;
-    url:  null | string;
-
-    constructor(buildTool: any) {
+    constructor(buildTool) {
         this.name = buildTool.name;
         this.url = buildTool.url;
     }
 }
-
 export class Deployment {
-    hosting:              string;
-    aws_accounts:         AwsAccount[];
-    deployment_repo:      string;
-    deployment_mechanism: string;
-    regions:              Region[];
-    cd_pipelines:         BuildTool;
-
-    constructor(deployment: any) {
+    constructor(deployment) {
         this.hosting = deployment.hosting;
         this.aws_accounts = [];
         this.regions = [];
-
         if (deployment.aws_accounts != null) {
             deployment.aws_accounts.forEach(awsAccount => {
                 this.aws_accounts.push(new AwsAccount(awsAccount));
-            })
+            });
         }
-
         this.deployment_repo = deployment.deployment_repo;
         this.deployment_mechanism = deployment.deployment_mechanism;
-
         if (deployment.regions != null) {
             deployment.regions.forEach(region => {
                 this.regions = [];
                 this.regions.push(new Region(region));
-            })
+            });
         }
-
         if (deployment.cd_pipelines != null) {
             this.cd_pipelines = new BuildTool(deployment.cd_pipelines);
         }
-
     }
-
 }
-
 export class AwsAccount {
-    name:   string;
-    number: number;
-
-    constructor(awsAccount: any) {
+    constructor(awsAccount) {
         this.name = awsAccount.name;
         this.number = awsAccount.number;
     }
 }
-
 export class Endpoint {
-    name:                string;
-    url:                 string;
-    public:              boolean;
-    data_classification: string;
-    authentication:      string[];
-
-    constructor(endpoint: any) {
+    constructor(endpoint) {
         this.name = endpoint.name;
         this.url = endpoint.url;
         this.public = endpoint.public;
         this.data_classification = endpoint.data_classification;
         this.authentication = [];
-        if (endpoint.authentication!=null){
+        if (endpoint.authentication != null) {
             endpoint.authentication.forEach(auth => {
                 this.authentication.push(auth);
-            })
+            });
         }
     }
 }
-
 export class Interactions {
-    [x: string]: Interaction;
-
-     constructor(interactions: any) {
-         interactions.forEach(key,interaction => {
-            this.key = new Interaction(interaction);
-         })
-     }
+    constructor(interactions) {
+        for (const [key, value] of Object.entries(interactions)) {
+            this[key] = new Interaction(value);
+        }
+    }
 }
-
 export class Interaction {
-    name:                string;
-    endpoints:           Endpoints;
-    protocol:            string;
-    timeout:             string;
-    simulator_available: string;
-    repo:                string;
-    description:         string;
-    flow_direction:      string;
-    pact:                string;
-    status:              string;
-
-    constructor(interaction: any) {
+    constructor(interaction) {
         this.name = interaction.name;
         if (interaction.endpoints != null) {
             this.endpoints = new Endpoints(interaction.endpoints);
@@ -211,67 +133,39 @@ export class Interaction {
         this.pact = interaction.pact;
         this.status = interaction.status;
     }
-
 }
-
 export class Endpoints {
-    [x: string]: Endpoint;
-
-    constructor(endpoints: any) {
-        endpoints.forEach(key,endpoint => {
-            this.key = new Endpoint(endpoint);
-        })
-
+    constructor(endpoints) {
+        for (const [key, value] of Object.entries(endpoints)) {
+            this[key] = new Endpoint(value);
+        }
     }
-
 }
-
 export class LeanSdlc {
-    url:  string;
-    path: string;
-
-    constructor(leanSdlc: any) {
+    constructor(leanSdlc) {
         this.url = leanSdlc.url;
         this.path = leanSdlc.path;
     }
-
 }
-
 export class OpsDashboard {
-    name: string;
-    url:  string;
-    type: string;
-
-    constructor(opsDashboard: any) {
+    constructor(opsDashboard) {
         this.name = opsDashboard.name;
-        this.url = opsDashboard.url;;
+        this.url = opsDashboard.url;
+        ;
         this.type = opsDashboard.type;
     }
 }
-
 export class QualityStageGates {
-    unit_test_coverage:         number;
-    automated_acceptance_tests: string;
-    load_tests:                 string;
-    resiliency_tests:           string;
-    independently_deployable:   string;
-
-    constructor(qos: any) {
+    constructor(qos) {
         this.unit_test_coverage = qos.unit_test_coverage;
         this.automated_acceptance_tests = qos.automated_acceptance_tests;
         this.load_tests = qos.load_tests;
         this.resiliency_tests = qos.resiliency_tests;
         this.independently_deployable = qos.independently_deployable;
     }
-
 }
-
 export class Region {
-    name:     string;
-    replicas: number;
-    vpc: VPC;
-
-    constructor(region: any) {
+    constructor(region) {
         this.name = region.name;
         this.replicas = region.replicas;
         if (region.vpc != null) {
@@ -279,70 +173,42 @@ export class Region {
         }
     }
 }
-
 export class VPC {
-    name: string
-    cidr: string
-    tgw: boolean
-
-    constructor(vpc: any) {
+    constructor(vpc) {
         this.name = vpc.name;
         this.cidr = vpc.cidr;
         this.tgw = vpc.tgw;
     }
-
 }
-
 export class SecretsManagement {
-    name: string;
-    repo: string;
-
-    constructor(secrets: any) {
+    constructor(secrets) {
         this.name = secrets.name;
         this.repo = secrets.repo;
     }
 }
-
 export class Security {
-    transport: Transport;
-    at_rest_encryption: string;
-
-    constructor(security: any) {
+    constructor(security) {
         if (security.transport != null) {
             this.transport = new Transport(security.transport);
         }
         this.at_rest_encryption = security.at_rest_encryption;
     }
 }
-
 export class Transport {
-    protocol:   string;
-    encryption: string;
-
-    constructor(transport: any) {
+    constructor(transport) {
         this.protocol = transport.protocol;
         this.encryption = transport.encryption;
     }
 }
-
 export class Technology {
-    name:    string;
-    type:    string;
-    version: string;
-
-    constructor(technology: any) {
+    constructor(technology) {
         this.name = technology.name;
         this.type = technology.type;
         this.version = technology.version;
     }
 }
-
 export class Diagram {
-    name:   string;
-    url:    string;
-    description: string;
-
-    constructor(diagram: any) {
+    constructor(diagram) {
         this.name = diagram.name;
         this.url = diagram.url;
         this.description = diagram.description;
