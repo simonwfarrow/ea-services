@@ -47,8 +47,8 @@ export default class ServiceDescriptor{
         this.team = ymlObj.team;
 
         if (ymlObj.technology != null) {
+            this.technology = [];
             ymlObj.technology.forEach(tech => {
-                this.technology = [];
                 this.technology.push(new Technology(tech));
             })
         }
@@ -61,15 +61,15 @@ export default class ServiceDescriptor{
         }
 
         if (ymlObj.ci_pipelines != null) {
+            this.ci_pipelines = [];
             ymlObj.ci_pipelines.forEach(pipeline => {
-                this.ci_pipelines = [];
                 this.ci_pipelines.push(new BuildTool(pipeline));
             })
         }
 
         if (ymlObj.ops_dashboards != null) {
+            this.ops_dashboards = [];
             ymlObj.ops_dashboards.forEach(dash => {
-                this.ops_dashboards = [];
                 this.ops_dashboards.push(new OpsDashboard(dash));
             })
         }
@@ -79,8 +79,8 @@ export default class ServiceDescriptor{
         }
 
         if (ymlObj.diagrams != null) {
+            this.diagrams = [];
             ymlObj.diagrams.forEach(diagram => {
-                this.diagrams = [];
                 this.diagrams.push(new Diagram(diagram));
             })
         }
@@ -134,8 +134,8 @@ export class Deployment {
         this.deployment_mechanism = deployment.deployment_mechanism;
 
         if (deployment.regions != null) {
+            this.regions = [];
             deployment.regions.forEach(region => {
-                this.regions = [];
                 this.regions.push(new Region(region));
             })
         }

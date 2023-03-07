@@ -5,6 +5,7 @@
   "type": "module",
   "module": "src/index.ts",
   "main": "index.js",
+  "types": "src/@types/sdTypes.ts",
   "scripts": {
     "test": "npm run test-unit",
     "test-unit": "ts-node ./node_modules/mocha/bin/mocha --loader=ts-node/esm --extension ts src/**/*.spec.ts",
