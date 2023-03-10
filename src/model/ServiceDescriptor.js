@@ -3,62 +3,66 @@ import yaml from "js-yaml";
 export const parseYaml = function (service) {
     return yaml.load(service);
 };
-export default class ServiceDescriptor {
-    constructor(service) {
-        const ymlObj = parseYaml(service);
-        this.name = ymlObj.name;
-        this.description = ymlObj.description;
-        this.type = ymlObj.type;
-        this.code_repo = ymlObj.code_repo;
-        this.doc_repo = ymlObj.doc_repo;
-        if (ymlObj.lean_sdlc != null) {
-            this.lean_sdlc = new LeanSdlc(ymlObj.lean_sdlc);
-        }
-        if (ymlObj.secrets_management != null) {
-            this.secrets_management = new SecretsManagement(ymlObj.secrets_management);
-        }
-        this.team = ymlObj.team;
-        if (ymlObj.technology != null) {
-            ymlObj.technology.forEach(tech => {
+export class ServiceDescriptor {
+    constructor(service, path) {
+        if (service != null && path != null) {
+            const ymlObj = parseYaml(service);
+            this._path = path;
+            this.name = ymlObj.name;
+            this.description = ymlObj.description;
+            this.type = ymlObj.type;
+            this.status = ymlObj.status;
+            this.code_repo = ymlObj.code_repo;
+            this.doc_repo = ymlObj.doc_repo;
+            if (ymlObj.lean_sdlc != null) {
+                this.lean_sdlc = new LeanSdlc(ymlObj.lean_sdlc);
+            }
+            if (ymlObj.secrets_management != null) {
+                this.secrets_management = new SecretsManagement(ymlObj.secrets_management);
+            }
+            this.team = ymlObj.team;
+            if (ymlObj.technology != null) {
                 this.technology = [];
-                this.technology.push(new Technology(tech));
-            });
-        }
-        if (ymlObj.build_tool != null) {
-            this.build_tool = new BuildTool(ymlObj.build_tool);
-        }
-        if (ymlObj.quality_stage_gates != null) {
-            this.quality_stage_gates = new QualityStageGates(ymlObj.quality_stage_gates);
-        }
-        if (ymlObj.ci_pipelines != null) {
-            ymlObj.ci_pipelines.forEach(pipeline => {
+                ymlObj.technology.forEach(tech => {
+                    this.technology.push(new Technology(tech));
+                });
+            }
+            if (ymlObj.build_tool != null) {
+                this.build_tool = new BuildTool(ymlObj.build_tool);
+            }
+            if (ymlObj.quality_stage_gates != null) {
+                this.quality_stage_gates = new QualityStageGates(ymlObj.quality_stage_gates);
+            }
+            if (ymlObj.ci_pipelines != null) {
                 this.ci_pipelines = [];
-                this.ci_pipelines.push(new BuildTool(pipeline));
-            });
-        }
-        if (ymlObj.ops_dashboards != null) {
-            ymlObj.ops_dashboards.forEach(dash => {
+                ymlObj.ci_pipelines.forEach(pipeline => {
+                    this.ci_pipelines.push(new BuildTool(pipeline));
+                });
+            }
+            if (ymlObj.ops_dashboards != null) {
                 this.ops_dashboards = [];
-                this.ops_dashboards.push(new OpsDashboard(dash));
-            });
-        }
-        if (ymlObj.interactions != null) {
-            this.interactions = new Interactions(ymlObj.interactions);
-        }
-        if (ymlObj.diagrams != null) {
-            ymlObj.diagrams.forEach(diagram => {
+                ymlObj.ops_dashboards.forEach(dash => {
+                    this.ops_dashboards.push(new OpsDashboard(dash));
+                });
+            }
+            if (ymlObj.interactions != null) {
+                this.interactions = new Interactions(ymlObj.interactions);
+            }
+            if (ymlObj.diagrams != null) {
                 this.diagrams = [];
-                this.diagrams.push(new Diagram(diagram));
-            });
-        }
-        if (ymlObj.deployment != null) {
-            this.deployment = new Deployment(ymlObj.deployment);
-        }
-        if (ymlObj.endpoint != null) {
-            this.endpoint = new Endpoint(ymlObj.endpoint);
-        }
-        if (ymlObj.security != null) {
-            this.security = new Security(ymlObj.security);
+                ymlObj.diagrams.forEach(diagram => {
+                    this.diagrams.push(new Diagram(diagram));
+                });
+            }
+            if (ymlObj.deployment != null) {
+                this.deployment = new Deployment(ymlObj.deployment);
+            }
+            if (ymlObj.endpoint != null) {
+                this.endpoint = new Endpoint(ymlObj.endpoint);
+            }
+            if (ymlObj.security != null) {
+                this.security = new Security(ymlObj.security);
+            }
         }
     }
 }
@@ -81,8 +85,8 @@ export class Deployment {
         this.deployment_repo = deployment.deployment_repo;
         this.deployment_mechanism = deployment.deployment_mechanism;
         if (deployment.regions != null) {
+            this.regions = [];
             deployment.regions.forEach(region => {
-                this.regions = [];
                 this.regions.push(new Region(region));
             });
         }

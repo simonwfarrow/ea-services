@@ -1,16 +1,19 @@
 import 'mocha';
-import ServicesRepositoryGitHub from "./ServicesRepositoryGitHub.js";
 import {expect} from "chai";
+import {getGitHubGraphQLConn} from "@electronic-architect/ea-content";
+import ServicesRepositoryGitHub from "./ServicesRepositoryGitHub.js";
+
 
 describe('The Github Service Repository', function () {
     it('returns a service', function () {
-        let repo = new ServicesRepositoryGitHub({
-            url: 'https://api.github.com',
-            token: 'Bearer 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',
+        let conn = getGitHubGraphQLConn(process.env.HOST || 'https://api.github.com' ,`Bearer ${process.env.TOKEN}`);
+        const config = {
+            connection: conn,
             owner: 'simonwfarrow',
             repo: 'ea-resources'
-        });
-        repo.getServices().then(services => {
+        };
+        const repo = new ServicesRepositoryGitHub();
+        repo.getServices(config).then(services => {
             expect(services).to.have.length.above(0);
         })
     })

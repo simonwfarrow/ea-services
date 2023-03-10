@@ -1,5 +1,5 @@
 import ServicesRepository from "./ServicesRepository.js";
-import ServiceDescriptor from "../model/ServiceDescriptor.js";
+import {ServiceDescriptor} from "../model/ServiceDescriptor.js";
 import * as fs from "fs";
 import path from "path";
 
@@ -22,7 +22,7 @@ class ServiceRepositoryLocal implements ServicesRepository {
                     if (err) {
                         console.error(err);
                     }
-                    services.push(new ServiceDescriptor(data));
+                    services.push(new ServiceDescriptor(data,file));
                 });
 
 

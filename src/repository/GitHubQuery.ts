@@ -1,14 +1,9 @@
-import {graphql} from '@octokit/graphql';
+import {graphql} from "@octokit/graphql/dist-types/types";
 
-export async function getServiceDescriptors(url: string, token: string, owner: string, repoName: string) {
-    const graphqlAuth = graphql.defaults({
-        baseUrl: url,
-        headers: {
-            authorization: token,
-        },
-    });
 
-    const repository = await graphqlAuth(
+export async function getServiceDescriptors(connection: graphql, owner: string, repoName: string) {
+
+    const repository = await connection(
         `query getSDs($owner: String!, $name: String!) {
                     repository(owner: $owner, name: $name ) {
                         object(expression: "HEAD:resources/service_descriptors/") {

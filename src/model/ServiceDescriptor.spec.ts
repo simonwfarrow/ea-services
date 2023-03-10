@@ -1,8 +1,9 @@
 import 'mocha';
 import {expect} from "chai";
-import ServiceDescriptor from "./ServiceDescriptor.js";
+import {ServiceDescriptor} from "./ServiceDescriptor.js";
 
-const sdStr : string  = 'name: Example Service\n' +
+const sdStr : string  = '_path: resources/service_descriptors/example.yml\n' +
+    'name: Example Service\n' +
     'description: Example of a service descriptor\n' +
     'type: platform\n' +
     'status: Live\n' +
@@ -95,7 +96,7 @@ const sdStr : string  = 'name: Example Service\n' +
 
 describe('The ServiceDescriptor class', function () {
     it('is constructed from yaml', function () {
-        let result = new ServiceDescriptor(sdStr);
+        let result = new ServiceDescriptor(sdStr,'_path: resources/service_descriptors/example.yml');
         expect(result).to.have.property('name');
         expect(result.interactions).to.have.property('example_in');
     })
